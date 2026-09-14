@@ -597,11 +597,8 @@ def get_rules_lookup(world, player: int):
                                                          state.can_reach_region("Ocean Monument", player)
                                                          or state.can_reach_region("Trail Ruins", player)
                                                      ),
-            "Careful Restoration": lambda state: can_excavate(world, state, player)
-                                                 and (
-                                                     state.can_reach_region("Ocean Monument", player)
-                                                     or state.can_reach_region("Trail Ruins", player)
-                                                 ),
+            "Careful Restoration": lambda state: state.can_reach_region("Trial Chambers", player)
+                                                 and basic_combat(world, state, player),
             "The Power of Books": lambda state: state.has("Progressive Tools", player, 2),
             "Isn't It Scute?": lambda state: can_adventure(world, state, player)
                                              and has_copper_ingots(world, state, player)
@@ -627,7 +624,7 @@ def get_rules_lookup(world, player: int):
             "Over-Overkill": lambda state: ominous_vaults(world, state, player),
             "Revaulting": lambda state: ominous_vaults(world, state, player),
             "Stay Hydrated!": lambda state: state.can_reach_region("The Nether", player)
-                                            or can_piglin_trade(world, state, player),
+                                            and can_piglin_trade(world, state, player),
             "Heart Transplanter": lambda state: can_adventure(world, state, player)
                                                 and (
                                                  (

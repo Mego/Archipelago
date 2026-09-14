@@ -1525,10 +1525,12 @@ class TestAdvancements(MCTestBase):
             ["Careful Restoration", False, []],
             ["Careful Restoration", False, [], ["Progressive Tools"]],
             ["Careful Restoration", False, [], ["Progressive Resource Crafting"]],
-            ["Careful Restoration", False, [], ["Brush"]],
             ["Careful Restoration", False, [], ["Progressive Weapons"]],
-            ["Careful Restoration", True, ["Progressive Tools", "Progressive Resource Crafting",
-                                           "Brush", "Progressive Weapons"]],
+            ["Careful Restoration", False, [], ["Progressive Armor", "Shield"]],
+            ["Careful Restoration", True, ["Progressive Tools", "Progressive Resource Crafting", "Progressive Weapons",
+                                           "Progressive Armor"]],
+            ["Careful Restoration", True, ["Progressive Tools", "Progressive Resource Crafting", "Progressive Weapons",
+                                           "Shield"]],
             ])
 
     def test_42121(self):
