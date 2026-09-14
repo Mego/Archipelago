@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger("MinecraftClient")
 
-version_file_endpoint = "https://raw.githubusercontent.com/qixils/NeoForgeAP/refs/heads/main/versions/minecraft_versions.json"
+version_file_endpoint = "https://raw.githubusercontent.com/qixils/NeoForgeAP/refs/heads/mc/26.2/versions/minecraft_versions.json"
 
 default_save_name = "Archipelago"
 

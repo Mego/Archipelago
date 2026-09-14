@@ -17,7 +17,7 @@ from .ItemPool import build_item_pool, get_junk_item_names
 from .Rules import set_rules
 from ..LauncherComponents import icon_paths
 
-client_version = 10
+client_version = 11
 
 icon_paths['mcicon'] = f"ap:{__name__}/assets/mcicon.png"
 
