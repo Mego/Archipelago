@@ -19,12 +19,15 @@ from ..LauncherComponents import icon_paths
 
 client_version = 11
 
-icon_paths['mcicon'] = f"ap:{__name__}/assets/mcicon.png"
+icon_paths["mcicon"] = f"ap:{__name__}/assets/mcicon.png"
+
 
 # register client
 def launch_client(*args):
     from .MinecraftClient import launch_subprocess
+
     launch_subprocess(*args)
+
 
 components.append(
     Component(
@@ -32,7 +35,7 @@ components.append(
         icon="mcicon",
         func=launch_client,
         component_type=Type.CLIENT,
-        file_identifier=SuffixIdentifier('.apmc'),
+        file_identifier=SuffixIdentifier(".apmc"),
     )
 )
 
@@ -56,6 +59,7 @@ class MinecraftSettings(settings.Group):
         """
         Path to local directory to install Java, Neo Forge, etc.
         """
+
         @classmethod
         def validate(cls, path: str):
             if os.path.exists(path) and not os.path.isdir(path):
@@ -79,7 +83,7 @@ class MinecraftWebWorld(WebWorld):
         "English",
         "minecraft_en.md",
         "minecraft/en",
-        ["qixils"]
+        ["qixils"],
     )
 
     setup_es = Tutorial(
@@ -88,7 +92,7 @@ class MinecraftWebWorld(WebWorld):
         "Español",
         "minecraft_es.md",
         "minecraft/es",
-        ["Edos"]
+        ["Edos"],
     )
 
     setup_sv = Tutorial(
@@ -97,7 +101,7 @@ class MinecraftWebWorld(WebWorld):
         "Swedish",
         "minecraft_sv.md",
         "minecraft/sv",
-        ["Albinum"]
+        ["Albinum"],
     )
 
     setup_fr = Tutorial(
@@ -106,7 +110,7 @@ class MinecraftWebWorld(WebWorld):
         "Français",
         "minecraft_fr.md",
         "minecraft/fr",
-        ["TheLynk"]
+        ["TheLynk"],
     )
 
     tutorials = [setup, setup_es, setup_sv, setup_fr]
@@ -119,6 +123,7 @@ class MinecraftWorld(World):
     structures, and materials to create a portal to another world. Defeat the Ender Dragon, and claim
     victory!
     """
+
     game = "Minecraft"
     options_dataclass = MinecraftOptions
     options: MinecraftOptions
@@ -134,34 +139,42 @@ class MinecraftWorld(World):
     ut_can_gen_without_yaml = True
 
     def _get_mc_data(self) -> Dict[str, Any]:
-        exits = [connection[0] for connection in Constants.region_info["default_connections"]]
+        exits = [
+            connection[0] for connection in Constants.region_info["default_connections"]
+        ]
         return {
             # Mod data
-            'world_seed': self.random.getrandbits(32),
-            'seed_name': self.multiworld.seed_name,
-            'player_name': self.player_name,
-            'player_id': self.player,
-            'client_version': client_version,
-            'structures': {exit: self.multiworld.get_entrance(exit, self.player).connected_region.name for exit in exits},
-            'advancement_goal': self.options.advancement_goal.value,
-            'egg_shards_required': min(self.options.egg_shards_required.value,
-                                       self.options.egg_shards_available.value),
-            'egg_shards_available': self.options.egg_shards_available.value,
-            'required_bosses': self.options.required_bosses.current_key,
-            'MC35': bool(self.options.send_defeated_mobs.value),
-            'death_link': bool(self.options.death_link.value),
-            'starting_items': json.dumps(self.options.starting_items.value),
-            'race': self.multiworld.is_race,
-            'immediate_respawn': bool(self.options.immediate_respawn.value),
-
+            "world_seed": self.random.getrandbits(32),
+            "seed_name": self.multiworld.seed_name,
+            "player_name": self.player_name,
+            "player_id": self.player,
+            "client_version": client_version,
+            "structures": {
+                exit: self.multiworld.get_entrance(
+                    exit, self.player
+                ).connected_region.name
+                for exit in exits
+            },
+            "advancement_goal": self.options.advancement_goal.value,
+            "egg_shards_required": min(
+                self.options.egg_shards_required.value,
+                self.options.egg_shards_available.value,
+            ),
+            "egg_shards_available": self.options.egg_shards_available.value,
+            "required_bosses": list(self.options.required_bosses.value),
+            "MC35": bool(self.options.send_defeated_mobs.value),
+            "death_link": bool(self.options.death_link.value),
+            "starting_items": json.dumps(self.options.starting_items.value),
+            "race": self.multiworld.is_race,
+            "immediate_respawn": bool(self.options.immediate_respawn.value),
             # Universal Tracker data
-            'bosses_to_defeat': self.options.required_bosses.value,
-            'shuffle_structures': self.options.shuffle_structures.value,
-            'structure_compasses': self.options.structure_compasses.value,
-            'combat_difficulty': self.options.combat_difficulty.value,
-            'include_hard_advancements': self.options.include_hard_advancements.value,
-            'include_unreasonable_advancements': self.options.include_unreasonable_advancements.value,
-            'include_postgame_advancements': self.options.include_postgame_advancements.value,
+            "bosses_to_defeat": list(self.options.required_bosses.value),
+            "shuffle_structures": self.options.shuffle_structures.value,
+            "structure_compasses": self.options.structure_compasses.value,
+            "combat_difficulty": self.options.combat_difficulty.value,
+            "include_hard_advancements": self.options.include_hard_advancements.value,
+            "include_unreasonable_advancements": self.options.include_unreasonable_advancements.value,
+            "include_postgame_advancements": self.options.include_postgame_advancements.value,
         }
 
     def generate_early(self: "MinecraftWorld") -> None:
@@ -170,15 +183,29 @@ class MinecraftWorld(World):
             self.using_ut = True
             self.passthrough = re_gen_passthrough["Minecraft"]
             self.options.advancement_goal.value = self.passthrough["advancement_goal"]
-            self.options.egg_shards_required.value = self.passthrough["egg_shards_required"]
-            self.options.egg_shards_available.value = self.passthrough["egg_shards_available"]
+            self.options.egg_shards_required.value = self.passthrough[
+                "egg_shards_required"
+            ]
+            self.options.egg_shards_available.value = self.passthrough[
+                "egg_shards_available"
+            ]
             self.options.required_bosses.value = self.passthrough["bosses_to_defeat"]
-            self.options.shuffle_structures.value = self.passthrough["shuffle_structures"]
-            self.options.structure_compasses.value = self.passthrough["structure_compasses"]
+            self.options.shuffle_structures.value = self.passthrough[
+                "shuffle_structures"
+            ]
+            self.options.structure_compasses.value = self.passthrough[
+                "structure_compasses"
+            ]
             self.options.combat_difficulty.value = self.passthrough["combat_difficulty"]
-            self.options.include_hard_advancements.value = self.passthrough["include_hard_advancements"]
-            self.options.include_unreasonable_advancements.value = self.passthrough["include_unreasonable_advancements"]
-            self.options.include_postgame_advancements.value = self.passthrough["include_postgame_advancements"]
+            self.options.include_hard_advancements.value = self.passthrough[
+                "include_hard_advancements"
+            ]
+            self.options.include_unreasonable_advancements.value = self.passthrough[
+                "include_unreasonable_advancements"
+            ]
+            self.options.include_postgame_advancements.value = self.passthrough[
+                "include_postgame_advancements"
+            ]
             self.options.death_link.value = self.passthrough["death_link"]
             self.options.immediate_respawn.value = self.passthrough["immediate_respawn"]
         else:
@@ -193,7 +220,9 @@ class MinecraftWorld(World):
         if name in Constants.item_info["trap_items"]:
             item_class |= ItemClassification.trap
 
-        return MinecraftItem(name, item_class, self.item_name_to_id.get(name, None), self.player)
+        return MinecraftItem(
+            name, item_class, self.item_name_to_id.get(name, None), self.player
+        )
 
     def create_event(self, region_name: str, event_name: str) -> None:
         region = self.multiworld.get_region(region_name, self.player)
@@ -221,17 +250,25 @@ class MinecraftWorld(World):
             e.connect(r)
 
         # Add locations
-        for region_name, locations in Constants.location_info["locations_by_region"].items():
+        for region_name, locations in Constants.location_info[
+            "locations_by_region"
+        ].items():
             region = self.multiworld.get_region(region_name, self.player)
             for loc_name in locations:
-                loc = MinecraftLocation(self.player, loc_name,
-                    self.location_name_to_id.get(loc_name, None), region)
+                loc = MinecraftLocation(
+                    self.player,
+                    loc_name,
+                    self.location_name_to_id.get(loc_name, None),
+                    region,
+                )
                 region.locations.append(loc)
 
         # Add events
         self.create_event("Nether Fortress", "Blaze Rods")
         self.create_event("The End", "Ender Dragon")
         self.create_event("Nether Fortress", "Wither")
+        self.create_event("Ocean Monument", "Elder Guardian")
+        self.create_event("Ancient City", "Warden")
 
         # Shuffle the connections
         shuffle_structures(self)
@@ -243,14 +280,18 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         data = self._get_mc_data()
-        filename = self.multiworld.get_out_file_name_base(self.player) + MinecraftContainer.patch_file_ending
+        filename = (
+            self.multiworld.get_out_file_name_base(self.player)
+            + MinecraftContainer.patch_file_ending
+        )
 
-        container = MinecraftContainer(data,
-                                       filename,
-                                       os.path.join(output_directory, filename),
-                                       self.player,
-                                       self.multiworld.get_file_safe_player_name(self.player),
-                                       )
+        container = MinecraftContainer(
+            data,
+            filename,
+            os.path.join(output_directory, filename),
+            self.player,
+            self.multiworld.get_file_safe_player_name(self.player),
+        )
         container.write()
 
     def fill_slot_data(self) -> dict:
@@ -268,12 +309,13 @@ class MinecraftWorld(World):
 class MinecraftLocation(Location):
     game = "Minecraft"
 
+
 class MinecraftItem(Item):
     game = "Minecraft"
 
 
 def mc_update_output(raw_data, server, port):
     data = json.loads(b64decode(raw_data))
-    data['server'] = server
-    data['port'] = port
-    return b64encode(bytes(json.dumps(data), 'utf-8'))
+    data["server"] = server
+    data["port"] = port
+    return b64encode(bytes(json.dumps(data), "utf-8"))
