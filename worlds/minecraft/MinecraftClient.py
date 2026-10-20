@@ -481,7 +481,7 @@ class MinecraftClient(MDApp):
             self.log_warn("existing server.properties found; overwriting it")
         with open(server_properties_path, "w") as server_properties_file:
             server_properties_file.writelines(["white-list=false"])
-            if self.apmc["set_seed"]:
+            if self.apmc.get("set_seed", False):
                 server_properties_file.writelines(
                     [f"level-seed={self.apmc['world_seed']}"]
                 )
